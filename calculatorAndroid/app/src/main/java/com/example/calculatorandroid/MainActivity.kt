@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         button_c = findViewById(R.id.button_c)
         button_point = findViewById(R.id.button_point)
         button_equals = findViewById(R.id.button_equal)
-        editText = findViewById(R.id.text)
+        editText = findViewById(R.id.editText)
 
 
         //operaciones
@@ -71,28 +71,24 @@ class MainActivity : AppCompatActivity() {
 
         button_plus.setOnClickListener{
             operation = Operations.SUM
-            num1 = editText.text.toString().toInt()
             editText.text = "${editText.text.toString()} +".toEditable()
             isnum2 = true;
 
         }
         button_min.setOnClickListener{
             operation = Operations.REST
-            num1 = editText.text.toString().toInt()
             editText.text = "${editText.text.toString()} -".toEditable()
             isnum2 = true;
         }
 
         button_div.setOnClickListener{
             operation = Operations.DIV
-            num1 = editText.text.toString().toInt()
             editText.text = "${editText.text.toString()} /".toEditable()
             isnum2 = true;
         }
 
         button_multiply.setOnClickListener{
             operation = Operations.MULT
-            num1 = editText.text.toString().toInt()
             editText.text = "${editText.text.toString()} *".toEditable()
             isnum2 = true;
         }
@@ -144,9 +140,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
-
-
 
 
 
