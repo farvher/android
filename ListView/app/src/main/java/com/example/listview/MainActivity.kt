@@ -44,6 +44,6 @@ class MainActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, paises)
         lv1.setAdapter(adapter)
 
-        lv1.setOnItemClickListener{parent, view, position, id -> tv1.text =  "Población de ${lv1.selectedItem} es ${habitantes[position]}" }
+        lv1.setOnItemClickListener{parent, view, position, id -> tv1.text =  "Población de ${paises[position]} es ${habitantes[position]}" }
     }
 }
