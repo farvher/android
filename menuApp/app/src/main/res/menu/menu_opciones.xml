@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/nuevo" android:id="@+id/opc1"/>
+    <item android:title="@string/acerca_de" android:id="@+id/opc3"/>
+</menu>
