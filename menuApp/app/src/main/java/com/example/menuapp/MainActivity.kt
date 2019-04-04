@@ -1,5 +1,7 @@
 package com.example.menuapp
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -107,80 +109,84 @@ class MainActivity : AppCompatActivity() {
         img16 = findViewById(R.id.imageButton16)
 
         buttonsList = mutableListOf(
-            img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14,img15,img16
+            img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11, img12, img13, img14, img15, img16
         )
 
         //inicializa la matriz
         setRandonImages()
 
-        img1.setOnClickListener {
+        img1.setOnTouchListener { v, event ->
             clickImageButton(img1)
         }
-        img2.setOnClickListener {
+        img2.setOnTouchListener { v, event ->
             clickImageButton(img2)
         }
-        img3.setOnClickListener {
+        img3.setOnTouchListener { v, event ->
             clickImageButton(img3)
         }
-        img4.setOnClickListener {
+        img4.setOnTouchListener { v, event ->
             clickImageButton(img4)
         }
-        img5.setOnClickListener {
+        img5.setOnTouchListener { v, event ->
             clickImageButton(img5)
         }
-        img6.setOnClickListener {
+        img6.setOnTouchListener { v, event ->
             clickImageButton(img6)
         }
-        img7.setOnClickListener {
+        img7.setOnTouchListener { v, event ->
             clickImageButton(img7)
         }
-        img8.setOnClickListener {
+        img8.setOnTouchListener { v, event ->
             clickImageButton(img8)
         }
-        img9.setOnClickListener {
+        img9.setOnTouchListener { v, event ->
             clickImageButton(img9)
         }
-        img10.setOnClickListener {
+        img10.setOnTouchListener { v, event ->
             clickImageButton(img10)
         }
-        img11.setOnClickListener {
+        img11.setOnTouchListener { v, event ->
             clickImageButton(img11)
         }
-        img12.setOnClickListener {
+        img12.setOnTouchListener { v, event ->
             clickImageButton(img12)
         }
-        img13.setOnClickListener {
+        img13.setOnTouchListener { v, event ->
             clickImageButton(img13)
         }
-        img14.setOnClickListener {
+        img14.setOnTouchListener { v, event ->
             clickImageButton(img14)
         }
-        img15.setOnClickListener {
+        img15.setOnTouchListener { v, event ->
             clickImageButton(img15)
         }
-        img16.setOnClickListener {
+        img16.setOnTouchListener { v, event ->
             clickImageButton(img16)
         }
 
     }
 
-    private fun dissapearImg(img :Int) {
-        var selected = gameMap.filter { entry -> selectedMap[entry.key]!! }.toMap()
-        if (selected.size >=2){
-                buttonsList.filter {  it.id == selected[img] }.forEach { it.visibility=View.INVISIBLE }
+    private fun dissapearImg(img: Int) {
+        var selected = gameMap.filter { entry -> selectedMap[entry.key]!! }.toMap()//todos los seleccionados
+        selected = selected.filter { entry -> selected.values.groupingBy { it }.eachCount()[entry.value] == 2 }
+        if (selected.size >= 2) {
+            buttonsList
+                .filter { selected.containsKey(it.id) } //filtrar button por seleccionados
+                .forEach { it.visibility = View.INVISIBLE }
         }
     }
 
-    private fun clickImageButton(imgButton: ImageButton) {
+    private fun clickImageButton(imgButton: ImageButton) :Boolean{
         if (!selectedMap.get(imgButton.id)!!) {
             var img = gameMap[imgButton.id]
             var bitmap = BitmapFactory.decodeResource(resources, img!!)
             imgButton.setImageBitmap(bitmap)
-            selectedMap.replace(imgButton.id,true)
-            if(oportunity == 2){
-                dissapearImg(img)
+            selectedMap.replace(imgButton.id, true)
+            dissapearImg(img)
+            if (oportunity == 1) {
+
                 resetAllImageButton()
-            }else{
+            } else {
                 oportunity++
             }
 
@@ -188,8 +194,9 @@ class MainActivity : AppCompatActivity() {
             setDefaultImg(imgButton)
             oportunity--
 
-            selectedMap.replace(imgButton.id,false)
+            selectedMap.replace(imgButton.id, false)
         }
+        return true
     }
 
     private fun setRandonImages() {
@@ -201,14 +208,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setDefaultImg(vararg  imagenButton : ImageButton) {
+    private fun setDefaultImg(vararg imagenButton: ImageButton) {
         var bitmap = BitmapFactory.decodeResource(resources, R.drawable.pokeball)
-        imagenButton.forEach {imageButton ->  imageButton.setImageBitmap(bitmap)  }
+        imagenButton.forEach { imageButton -> imageButton.setImageBitmap(bitmap) }
     }
-    private fun resetAllImageButton(){
 
-        setDefaultImg(img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14,img15,img16)
-        oportunity=0
+    private fun resetAllImageButton() {
+
+        setDefaultImg(
+            img1,
+            img2,
+            img3,
+            img4,
+            img5,
+            img6,
+            img7,
+            img8,
+            img9,
+            img10,
+            img11,
+            img12,
+            img13,
+            img14,
+            img15,
+            img16
+        )
+        oportunity = 0
+        selectedMap.replaceAll { t, u -> false }
 
     }
 
@@ -221,11 +247,21 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         var id = item?.itemId?.toInt()
         if (id == (R.id.opc1)) {
-            showMessage("Opcion uno")
+            restartActivity()
+
         } else if (id == (R.id.opc3)) {
             showMessage("Opcion tres")
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun restartActivity() {
+        var intent = getIntent()
+        overridePendingTransition(0, 0)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        finish()
+        overridePendingTransition(0, 0)
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
     }
 
 
