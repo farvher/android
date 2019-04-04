@@ -1,12 +1,19 @@
 package com.example.menuapp
 
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.SoundEffectConstants
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
@@ -32,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var img16: ImageButton
 
 
+    private lateinit var audioManager :AudioManager
     private var oportunity = 0;
     private val gameMap = mutableMapOf<Int, Int>()
 
@@ -114,53 +122,55 @@ class MainActivity : AppCompatActivity() {
 
         //inicializa la matriz
         setRandonImages()
+        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-        img1.setOnTouchListener { v, event ->
+
+        img1.setOnClickListener {
             clickImageButton(img1)
         }
-        img2.setOnTouchListener { v, event ->
+        img2.setOnClickListener {
             clickImageButton(img2)
         }
-        img3.setOnTouchListener { v, event ->
+        img3.setOnClickListener {
             clickImageButton(img3)
         }
-        img4.setOnTouchListener { v, event ->
+        img4.setOnClickListener {
             clickImageButton(img4)
         }
-        img5.setOnTouchListener { v, event ->
+        img5.setOnClickListener {
             clickImageButton(img5)
         }
-        img6.setOnTouchListener { v, event ->
+        img6.setOnClickListener {
             clickImageButton(img6)
         }
-        img7.setOnTouchListener { v, event ->
+        img7.setOnClickListener {
             clickImageButton(img7)
         }
-        img8.setOnTouchListener { v, event ->
+        img8.setOnClickListener {
             clickImageButton(img8)
         }
-        img9.setOnTouchListener { v, event ->
+        img9.setOnClickListener {
             clickImageButton(img9)
         }
-        img10.setOnTouchListener { v, event ->
+        img10.setOnClickListener {
             clickImageButton(img10)
         }
-        img11.setOnTouchListener { v, event ->
+        img11.setOnClickListener {
             clickImageButton(img11)
         }
-        img12.setOnTouchListener { v, event ->
+        img12.setOnClickListener {
             clickImageButton(img12)
         }
-        img13.setOnTouchListener { v, event ->
+        img13.setOnClickListener {
             clickImageButton(img13)
         }
-        img14.setOnTouchListener { v, event ->
+        img14.setOnClickListener {
             clickImageButton(img14)
         }
-        img15.setOnTouchListener { v, event ->
+        img15.setOnClickListener {
             clickImageButton(img15)
         }
-        img16.setOnTouchListener { v, event ->
+        img16.setOnClickListener {
             clickImageButton(img16)
         }
 
@@ -172,19 +182,18 @@ class MainActivity : AppCompatActivity() {
         if (selected.size >= 2) {
             buttonsList
                 .filter { selected.containsKey(it.id) } //filtrar button por seleccionados
-                .forEach { it.visibility = View.INVISIBLE }
+                .forEach { it ->
+                    it.setBackgroundColor(Color.DKGRAY)
+                    it.isClickable = false
+                    }
         }
     }
 
-    private fun clickImageButton(imgButton: ImageButton) :Boolean{
+    private fun clickImageButton(imgButton: ImageButton): Boolean {
         if (!selectedMap.get(imgButton.id)!!) {
-            var img = gameMap[imgButton.id]
-            var bitmap = BitmapFactory.decodeResource(resources, img!!)
-            imgButton.setImageBitmap(bitmap)
-            selectedMap.replace(imgButton.id, true)
-            dissapearImg(img)
-            if (oportunity == 1) {
-
+            var img = openPokeBall(imgButton)
+            dissapearImg(img!!)
+            if (oportunity == 2) {
                 resetAllImageButton()
             } else {
                 oportunity++
@@ -196,7 +205,18 @@ class MainActivity : AppCompatActivity() {
 
             selectedMap.replace(imgButton.id, false)
         }
+        if(selectedMap.all {  it.value }){
+            showMessage("Felicidades ganaste!!")
+        }
         return true
+    }
+
+    private fun openPokeBall(imgButton: ImageButton): Int? {
+        var img = gameMap[imgButton.id]
+        var bitmap = BitmapFactory.decodeResource(resources, img!!)
+        imgButton.setImageBitmap(bitmap)
+        selectedMap.replace(imgButton.id, true)
+        return img
     }
 
     private fun setRandonImages() {
@@ -210,7 +230,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setDefaultImg(vararg imagenButton: ImageButton) {
         var bitmap = BitmapFactory.decodeResource(resources, R.drawable.pokeball)
-        imagenButton.forEach { imageButton -> imageButton.setImageBitmap(bitmap) }
+        imagenButton.filter { it-> it.isClickable}.forEach { imageButton -> imageButton.setImageBitmap(bitmap) }
     }
 
     private fun resetAllImageButton() {
@@ -250,7 +270,8 @@ class MainActivity : AppCompatActivity() {
             restartActivity()
 
         } else if (id == (R.id.opc3)) {
-            showMessage("Opcion tres")
+            val intent = Intent(this,About::class.java)
+            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }
