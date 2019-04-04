@@ -1,17 +1,15 @@
 package com.example.menuapp
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
-
 
 
     private lateinit var img1: ImageButton
@@ -31,12 +29,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var img15: ImageButton
     private lateinit var img16: ImageButton
 
+
+    private var oportunity = 0;
     private val gameMap = mutableMapOf<Int, Int>()
 
-    private lateinit var listButtons;
 
-
-    val images = mutableListOf<Int>(
+    private val images = mutableListOf(
 
         R.drawable.pikachu,
         R.drawable.bulbasaur,
@@ -47,8 +45,9 @@ class MainActivity : AppCompatActivity() {
         R.drawable.snorlax,
         R.drawable.squirtle
     )
+    private var buttonsList = mutableListOf<ImageButton>()
 
-    val buttons = mutableListOf<Int>(
+    private val buttons = mutableListOf(
         R.id.imageButton1,
         R.id.imageButton2,
         R.id.imageButton3,
@@ -65,6 +64,24 @@ class MainActivity : AppCompatActivity() {
         R.id.imageButton14,
         R.id.imageButton15,
         R.id.imageButton16
+    )
+    private var selectedMap = mutableMapOf(
+        R.id.imageButton1 to false,
+        R.id.imageButton2 to false,
+        R.id.imageButton3 to false,
+        R.id.imageButton4 to false,
+        R.id.imageButton5 to false,
+        R.id.imageButton6 to false,
+        R.id.imageButton7 to false,
+        R.id.imageButton8 to false,
+        R.id.imageButton9 to false,
+        R.id.imageButton10 to false,
+        R.id.imageButton11 to false,
+        R.id.imageButton12 to false,
+        R.id.imageButton13 to false,
+        R.id.imageButton14 to false,
+        R.id.imageButton15 to false,
+        R.id.imageButton16 to false
     )
 
 
@@ -89,85 +106,109 @@ class MainActivity : AppCompatActivity() {
         img15 = findViewById(R.id.imageButton15)
         img16 = findViewById(R.id.imageButton16)
 
-        listButtons =
+        buttonsList = mutableListOf(
+            img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14,img15,img16
+        )
 
         //inicializa la matriz
-        setRandonImages();
+        setRandonImages()
 
-        img1.setOnClickListener { v ->
-            setMapImage(R.id.imageButton1,img1)
+        img1.setOnClickListener {
+            clickImageButton(img1)
         }
-        img2.setOnClickListener { v ->
-            setMapImage(R.id.imageButton2,img2)
+        img2.setOnClickListener {
+            clickImageButton(img2)
         }
-        img3.setOnClickListener { v ->
-            setMapImage(R.id.imageButton3,img3)
+        img3.setOnClickListener {
+            clickImageButton(img3)
         }
-        img4.setOnClickListener { v ->
-            setMapImage(R.id.imageButton4,img4)
+        img4.setOnClickListener {
+            clickImageButton(img4)
         }
-        img5.setOnClickListener { v ->
-            setMapImage(R.id.imageButton5,img5)
+        img5.setOnClickListener {
+            clickImageButton(img5)
         }
-        img6.setOnClickListener { v ->
-            setMapImage(R.id.imageButton6,img6)
+        img6.setOnClickListener {
+            clickImageButton(img6)
         }
-        img7.setOnClickListener { v ->
-            setMapImage(R.id.imageButton7,img7)
+        img7.setOnClickListener {
+            clickImageButton(img7)
         }
-        img8.setOnClickListener { v ->
-            setMapImage(R.id.imageButton8,img8)
+        img8.setOnClickListener {
+            clickImageButton(img8)
         }
-        img9.setOnClickListener { v ->
-            setMapImage(R.id.imageButton9,img9)
+        img9.setOnClickListener {
+            clickImageButton(img9)
         }
-        img10.setOnClickListener { v ->
-            setMapImage(R.id.imageButton10,img10)
+        img10.setOnClickListener {
+            clickImageButton(img10)
         }
-        img11.setOnClickListener { v ->
-            setMapImage(R.id.imageButton11,img11)
+        img11.setOnClickListener {
+            clickImageButton(img11)
         }
-        img12.setOnClickListener { v ->
-            setMapImage(R.id.imageButton12,img12)
+        img12.setOnClickListener {
+            clickImageButton(img12)
         }
-        img13.setOnClickListener { v ->
-            setMapImage(R.id.imageButton13,img13)
+        img13.setOnClickListener {
+            clickImageButton(img13)
         }
-        img14.setOnClickListener { v ->
-            setMapImage(R.id.imageButton14,img14)
+        img14.setOnClickListener {
+            clickImageButton(img14)
         }
-        img15.setOnClickListener { v ->
-            setMapImage(R.id.imageButton15,img15)
+        img15.setOnClickListener {
+            clickImageButton(img15)
         }
-        img16.setOnClickListener { v ->
-            setMapImage(R.id.imageButton16,img16)
+        img16.setOnClickListener {
+            clickImageButton(img16)
         }
 
     }
 
-
-    fun isEqualImage(imgA: ImageButton, imgB: ImageButton): Boolean {
-        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.interrogation_icon)
-
-
-        return false
-    }
-
-    fun setMapImage(button: Int, imagenButton : ImageButton){
-        var img =  gameMap.get(button);
-        var bitmap = BitmapFactory.decodeResource(resources,img!!)
-        imagenButton.setImageBitmap(bitmap)
-    }
-    fun setRandonImages() {
-        for(b : Int  in buttons){
-            var pos = (0..7).random()
-            var img = images[pos]
-            gameMap.put(b,img)
+    private fun dissapearImg(img :Int) {
+        var selected = gameMap.filter { entry -> selectedMap[entry.key]!! }.toMap()
+        if (selected.size >=2){
+                buttonsList.filter {  it.id == selected[img] }.forEach { it.visibility=View.INVISIBLE }
         }
     }
 
-    fun resetImages(){
+    private fun clickImageButton(imgButton: ImageButton) {
+        if (!selectedMap.get(imgButton.id)!!) {
+            var img = gameMap[imgButton.id]
+            var bitmap = BitmapFactory.decodeResource(resources, img!!)
+            imgButton.setImageBitmap(bitmap)
+            selectedMap.replace(imgButton.id,true)
+            if(oportunity == 2){
+                dissapearImg(img)
+                resetAllImageButton()
+            }else{
+                oportunity++
+            }
 
+        } else {
+            setDefaultImg(imgButton)
+            oportunity--
+
+            selectedMap.replace(imgButton.id,false)
+        }
+    }
+
+    private fun setRandonImages() {
+        buttons.shuffle()
+        images.addAll(images)
+        var a = 0
+        for (b: Int in buttons) {
+            gameMap.put(b, images[a++])
+        }
+    }
+
+    private fun setDefaultImg(vararg  imagenButton : ImageButton) {
+        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.pokeball)
+        imagenButton.forEach {imageButton ->  imageButton.setImageBitmap(bitmap)  }
+    }
+    private fun resetAllImageButton(){
+
+        setDefaultImg(img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14,img15,img16)
+        oportunity=0
 
     }
 
