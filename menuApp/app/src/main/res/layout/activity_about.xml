@@ -9,10 +9,10 @@
 
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="395dp"
-            android:layout_height="715dp" tools:layout_editor_absoluteY="8dp"
-            android:background="@color/colorAccent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+    >
         <TextView
                 android:text="Integrantes"
                 android:layout_width="match_parent"
@@ -23,12 +23,12 @@
                 android:text="Jhon Mario Forero Palacios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/textView2" android:textSize="24sp"
-                android:textColor="@android:color/background_light"/>
+                android:textColor="@android:color/background_light" android:textAlignment="center"/>
         <TextView
                 android:text="Farith Ernesto Sanmiguel Lopez"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/textView3" android:textSize="24sp"
-                android:textColor="@android:color/background_light"/>
+                android:textColor="@android:color/background_light" android:textAlignment="center"/>
         <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="84dp" app:srcCompat="@mipmap/logoapp" android:id="@+id/imageView"/>
