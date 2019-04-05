@@ -18,13 +18,10 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
 
-/**
- * @author farith sanmiguel
- * https://github.com/farvher
- * */
+
 class MainActivity : AppCompatActivity() {
 
-
+    private lateinit var mp: MediaPlayer
     private lateinit var img1: ImageButton
     private lateinit var img2: ImageButton
     private lateinit var img3: ImageButton
@@ -129,6 +126,8 @@ class MainActivity : AppCompatActivity() {
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
 
+
+
         img1.setOnClickListener {
             clickImageButton(img1)
         }
@@ -187,12 +186,15 @@ class MainActivity : AppCompatActivity() {
         var selected = gameMap.filter { entry -> selectedMap[entry.key]!! }.toMap()//todos los seleccionados
         selected = selected.filter { entry -> selected.values.groupingBy { it }.eachCount()[entry.value] == 2 }
         if (selected.size >= 2) {
+            mp = MediaPlayer.create(this, R.raw.encontro)
+            mp.start()
             buttonsList
                 .filter { selected.containsKey(it.id) } //filtrar button por seleccionados
                 .forEach { it ->
                     it.setBackgroundColor(Color.RED)
                     it.isClickable = false
-                    }
+                }
+
         }
     }
 
@@ -203,7 +205,10 @@ class MainActivity : AppCompatActivity() {
     private fun clickImageButton(imgButton: ImageButton): Boolean {
         if (!selectedMap.get(imgButton.id)!!) {
             var img = openPokeBall(imgButton)
+
+
             dissapearImg(img!!)
+
             if (oportunity == 2) {
                 resetAllImageButton()
             } else {
@@ -211,15 +216,45 @@ class MainActivity : AppCompatActivity() {
             }
 
         } else {
+
             setDefaultImg(imgButton)
+
+
             oportunity--
 
             selectedMap.replace(imgButton.id, false)
         }
         if(buttonsList.all {  !it.isClickable }){
+            setOverImg(img1,
+                img2,
+                img3,
+                img4,
+                img5,
+                img6,
+                img7,
+                img8,
+                img9,
+                img10,
+                img11,
+                img12,
+                img13,
+                img14,
+                img15,
+                img16
+            )
+
+
             showMessage("Felicidades ganaste!!")
         }
         return true
+    }
+
+    /**
+     * coloca la imagen de juego terminado
+     * */
+    private fun setOverImg(vararg imagenButton: ImageButton) {
+        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.over)
+        imagenButton.forEach { imageButton -> imageButton.setImageBitmap(bitmap) }
     }
 
     /**
@@ -243,6 +278,8 @@ class MainActivity : AppCompatActivity() {
         for (b: Int in buttons) {
             gameMap.put(b, images[a++])
         }
+
+
     }
 
     /**
@@ -257,6 +294,9 @@ class MainActivity : AppCompatActivity() {
      * reinicia todas las imagenes no deshabilitadas
      * */
     private fun resetAllImageButton() {
+
+        mp = MediaPlayer.create(this, R.raw.error)
+        mp.start()
 
         setDefaultImg(
             img1,
@@ -276,6 +316,7 @@ class MainActivity : AppCompatActivity() {
             img15,
             img16
         )
+
         oportunity = 0
         selectedMap.replaceAll { t, u -> false }
 
