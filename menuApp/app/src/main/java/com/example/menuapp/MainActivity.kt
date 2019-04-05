@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
@@ -39,7 +40,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var img15: ImageButton
     private lateinit var img16: ImageButton
 
-
+    private lateinit var mp2 : MediaPlayer
+    private lateinit var mp1 : MediaPlayer
     private lateinit var audioManager :AudioManager
     private var oportunity = 0;
     private val gameMap = mutableMapOf<Int, Int>()
@@ -116,6 +118,8 @@ class MainActivity : AppCompatActivity() {
         img14 = findViewById(R.id.imageButton14)
         img15 = findViewById(R.id.imageButton15)
         img16 = findViewById(R.id.imageButton16)
+        mp2 =  MediaPlayer.create(this, R.raw.encontro)
+        mp1 =  MediaPlayer.create(this, R.raw.error)
 
         buttonsList = mutableListOf(
             img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11, img12, img13, img14, img15, img16
@@ -186,8 +190,8 @@ class MainActivity : AppCompatActivity() {
         var selected = gameMap.filter { entry -> selectedMap[entry.key]!! }.toMap()//todos los seleccionados
         selected = selected.filter { entry -> selected.values.groupingBy { it }.eachCount()[entry.value] == 2 }
         if (selected.size >= 2) {
-            mp = MediaPlayer.create(this, R.raw.encontro)
-            mp.start()
+
+            mp2.start()
             buttonsList
                 .filter { selected.containsKey(it.id) } //filtrar button por seleccionados
                 .forEach { it ->
@@ -195,7 +199,11 @@ class MainActivity : AppCompatActivity() {
                     it.isClickable = false
                 }
 
+        }else{
+
+            mp1.start()
         }
+
     }
 
     /**
@@ -209,8 +217,9 @@ class MainActivity : AppCompatActivity() {
 
             dissapearImg(img!!)
 
-            if (oportunity == 2) {
-                resetAllImageButton()
+            if (oportunity == 1) {
+                Handler().postDelayed({
+                resetAllImageButton()},500)
             } else {
                 oportunity++
             }
@@ -254,7 +263,9 @@ class MainActivity : AppCompatActivity() {
      * */
     private fun setOverImg(vararg imagenButton: ImageButton) {
         var bitmap = BitmapFactory.decodeResource(resources, R.drawable.over)
-        imagenButton.forEach { imageButton -> imageButton.setImageBitmap(bitmap) }
+        imagenButton.forEach { imageButton ->
+            imageButton.setImageBitmap(bitmap)
+            imageButton.setBackgroundColor(Color.RED)}
     }
 
     /**
@@ -295,30 +306,29 @@ class MainActivity : AppCompatActivity() {
      * */
     private fun resetAllImageButton() {
 
-        mp = MediaPlayer.create(this, R.raw.error)
-        mp.start()
+            setDefaultImg(
+                img1,
+                img2,
+                img3,
+                img4,
+                img5,
+                img6,
+                img7,
+                img8,
+                img9,
+                img10,
+                img11,
+                img12,
+                img13,
+                img14,
+                img15,
+                img16
+            )
 
-        setDefaultImg(
-            img1,
-            img2,
-            img3,
-            img4,
-            img5,
-            img6,
-            img7,
-            img8,
-            img9,
-            img10,
-            img11,
-            img12,
-            img13,
-            img14,
-            img15,
-            img16
-        )
+            oportunity = 0
+            selectedMap.replaceAll { t, u -> false }
 
-        oportunity = 0
-        selectedMap.replaceAll { t, u -> false }
+
 
     }
 
