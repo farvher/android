@@ -18,6 +18,10 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
 
+/**
+ * @author farith sanmiguel
+ * https://github.com/farvher
+ * */
 class MainActivity : AppCompatActivity() {
 
 
@@ -176,6 +180,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Desaparece las imagenes que se han seleccionado y son iguales
+     * */
     private fun dissapearImg(img: Int) {
         var selected = gameMap.filter { entry -> selectedMap[entry.key]!! }.toMap()//todos los seleccionados
         selected = selected.filter { entry -> selected.values.groupingBy { it }.eachCount()[entry.value] == 2 }
@@ -183,12 +190,16 @@ class MainActivity : AppCompatActivity() {
             buttonsList
                 .filter { selected.containsKey(it.id) } //filtrar button por seleccionados
                 .forEach { it ->
-                    it.setBackgroundColor(Color.DKGRAY)
+                    it.setBackgroundColor(Color.RED)
                     it.isClickable = false
                     }
         }
     }
 
+    /**
+     * eventos al dar click en una imagen
+     * resta y suma oportunidades
+     * */
     private fun clickImageButton(imgButton: ImageButton): Boolean {
         if (!selectedMap.get(imgButton.id)!!) {
             var img = openPokeBall(imgButton)
@@ -205,12 +216,15 @@ class MainActivity : AppCompatActivity() {
 
             selectedMap.replace(imgButton.id, false)
         }
-        if(selectedMap.all {  it.value }){
+        if(buttonsList.all {  !it.isClickable }){
             showMessage("Felicidades ganaste!!")
         }
         return true
     }
 
+    /**
+     * Cambia la imagen del boton por el pokemon
+     * */
     private fun openPokeBall(imgButton: ImageButton): Int? {
         var img = gameMap[imgButton.id]
         var bitmap = BitmapFactory.decodeResource(resources, img!!)
@@ -219,6 +233,9 @@ class MainActivity : AppCompatActivity() {
         return img
     }
 
+    /**
+     * inicializa los 16 botones con 16 imagenes aleatoriamente
+     * */
     private fun setRandonImages() {
         buttons.shuffle()
         images.addAll(images)
@@ -228,11 +245,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * coloca la imagen default - la pokeball
+     * */
     private fun setDefaultImg(vararg imagenButton: ImageButton) {
         var bitmap = BitmapFactory.decodeResource(resources, R.drawable.pokeball)
         imagenButton.filter { it-> it.isClickable}.forEach { imageButton -> imageButton.setImageBitmap(bitmap) }
     }
 
+    /**
+     * reinicia todas las imagenes no deshabilitadas
+     * */
     private fun resetAllImageButton() {
 
         setDefaultImg(
@@ -276,6 +299,11 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+
+    /**
+     * reinicia el juego
+     *
+     * */
     private fun restartActivity() {
         var intent = getIntent()
         overridePendingTransition(0, 0)
@@ -286,8 +314,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * muestra un mensaje toast
+     **/
     private fun showMessage(msj: String) {
-        val notification = Toast.makeText(this, msj, Toast.LENGTH_SHORT)
+        val notification = Toast.makeText(this, msj, Toast.LENGTH_LONG)
         notification.show()
     }
 

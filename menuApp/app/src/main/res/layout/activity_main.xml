@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" tools:layout_editor_absoluteY="3dp"
             tools:layout_editor_absoluteX="8dp"
-            android:shrinkColumns="0,1,2,3">
+            android:shrinkColumns="0,1,2,3" android:background="@color/colorAccent">
 
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
             <ImageButton
@@ -19,13 +19,13 @@
                     tools:layout_editor_absoluteY="638dp" tools:layout_editor_absoluteX="12dp"
                     android:id="@+id/imageButton1"/>
             <ImageButton
-                    android:layout_width="124dp"
-                    android:layout_height="119dp" app:srcCompat="@drawable/pokeball"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" app:srcCompat="@drawable/pokeball"
                     tools:layout_editor_absoluteY="16dp" tools:layout_editor_absoluteX="0dp"
                     android:id="@+id/imageButton2"/>
             <ImageButton
                     android:layout_width="wrap_content"
-                    android:layout_height="119dp" app:srcCompat="@drawable/pokeball"
+                    android:layout_height="wrap_content" app:srcCompat="@drawable/pokeball"
                     tools:layout_editor_absoluteY="16dp" tools:layout_editor_absoluteX="124dp"
                     android:id="@+id/imageButton3"/>
             <ImageButton
