@@ -49,11 +49,11 @@ class MainActivity : AppCompatActivity() {
         val admin = AdminSQLiteOpenHelper(this, "administracion", null, 1)
         val bd = admin.writableDatabase
         val fila = bd.rawQuery("select id from usuarios where " +
-                "name='${nickname.text.toString()}' and clave = '${password.text.toString()}' ", null)
-        if (fila.count >=1){
+                "name = '${nickname.text.toString()}' and clave = '${password.text.toString()}' ", null)
+        if (fila.moveToFirst()){
             //TODO VALIDAR si el usuario existe
 
-           var idUser  = fila.getColumnName(0)
+           var idUser  = fila.getInt(0)
             if(mostrarFrase.isChecked){
                 var intent = Intent(this,VerFrases::class.java)
                 intent.putExtra("nick",nickname.text.toString())
