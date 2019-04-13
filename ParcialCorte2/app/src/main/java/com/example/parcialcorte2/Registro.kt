@@ -1,10 +1,12 @@
 package com.example.parcialcorte2
 
+import android.content.ContentValues
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 
 class Registro : AppCompatActivity() {
 
@@ -27,7 +29,17 @@ class Registro : AppCompatActivity() {
 
         registrar.setOnClickListener{
 
-            //guardar registro
+            val admin = AdminSQLiteOpenHelper(this,"administracion", null, 1)
+            val bd = admin.writableDatabase
+            val registro = ContentValues()
+            registro.put("name", nick.text.toString())
+            registro.put("clave", clave.text.toString())
+            bd.insert("usuarios", null, registro)
+            bd.close()
+            nick.setText("")
+            clave.setText("")
+            Toast.makeText(this, "Usuario registrado.!!", Toast.LENGTH_SHORT).show()
+
         }
 
         volver.setOnClickListener {
