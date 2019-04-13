@@ -17,6 +17,7 @@ class VerFrases : AppCompatActivity() {
 
     private var idUser: Int = 0
     private var dato1: String = ""
+    private var dato2 :String =""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,15 +38,24 @@ class VerFrases : AppCompatActivity() {
         val admin = AdminSQLiteOpenHelper(this, "administracion", null, 1)
         val bd = admin.writableDatabase
         val fila = bd.rawQuery("select frase from frases where iduser='${idUser}'", null)
+        val fila2 = bd.rawQuery("select frase from frases ", null)
         if (fila.moveToFirst()) {
             do {
-                dato1 = dato1 + fila.getString(0) + "\n"
+                dato1 = dato1 + "*" + fila.getString(0) + "\n"
 
             } while (fila.moveToNext());
         } else {
             Toast.makeText(this, "No existe una frase asociada al usuario.", Toast.LENGTH_SHORT).show()
         }
-        frases.text = dato1
+        if (fila2.moveToFirst()) {
+            do {
+                dato2 = dato2 + fila2.getString(0) + "\n"
+
+            } while (fila2.moveToNext());
+        } else {
+            Toast.makeText(this, "No existe una frase asociada al usuario.", Toast.LENGTH_SHORT).show()
+        }
+        frases.text = dato1 + dato2
         bd.close()
 
 

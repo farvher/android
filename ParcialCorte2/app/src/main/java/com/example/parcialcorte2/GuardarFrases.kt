@@ -33,7 +33,7 @@ class GuardarFrases : AppCompatActivity() {
 
         guardarFrase.setOnClickListener{
 
-            val admin = AdminSQLiteOpenHelper(this,"administracion", null, 1)
+            val admin =AdminSQLiteOpenHelper (this,"administracion", null, 1)
             val bd = admin.writableDatabase
             val registrof = ContentValues()
 
